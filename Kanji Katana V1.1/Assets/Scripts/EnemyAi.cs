@@ -32,6 +32,7 @@ public class EnemyAi : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        walkPointSet = false;
 
     }
 
@@ -41,7 +42,7 @@ public class EnemyAi : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        Debug.Log("attack: " + playerInAttackRange + ", sight " + playerInSightRange);
+        
 
         if (!playerInSightRange && !playerInAttackRange) Patroling();
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
@@ -49,6 +50,7 @@ public class EnemyAi : MonoBehaviour
     }
     private void Patroling()
     {
+        Debug.Log("attack: " + playerInAttackRange + ", sight " + playerInSightRange);
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet)

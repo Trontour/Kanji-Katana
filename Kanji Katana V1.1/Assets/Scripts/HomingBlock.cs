@@ -10,6 +10,7 @@ public class HomingBlock : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     private Rigidbody target;
     [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private GameObject yellowBlock;
 
     [Header("START")]
     [SerializeField] private float upwardsHeight = 10;
@@ -94,7 +95,7 @@ public class HomingBlock : MonoBehaviour
         if (explosionPrefab) Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         //if (collision.transform.TryGetComponent<IExplode>(out var ex)) ex.Explode();
 
-        Destroy(gameObject);
+        Destroy(yellowBlock);
     }
 
     private void OnDrawGizmos()
