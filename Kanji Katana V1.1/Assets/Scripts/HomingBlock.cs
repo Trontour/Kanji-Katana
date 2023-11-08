@@ -30,12 +30,14 @@ public class HomingBlock : MonoBehaviour
     private Vector3 standardPrediction, deviatedPrediction;
 
     [Header("DEVIATION")]
+    [SerializeField] private float stopDeviatingDistance = 10f;
     [SerializeField] private float deviationAmount = 50;
     [SerializeField] private float deviationSpeed = 2;
 
 
 
     private float startTime;
+    private Vector3 distance;
 
     private void Awake()
     {
@@ -57,7 +59,11 @@ public class HomingBlock : MonoBehaviour
 
             PredictMovement(leadTimePercentage);
 
-            AddDeviation(leadTimePercentage);
+            distance = transform.position - target.position;
+
+            if (distance.magnitude > stopDeviatingDistance) ;
+                AddDeviation(leadTimePercentage);
+
 
             RotateRocket();
         }
@@ -80,7 +86,10 @@ public class HomingBlock : MonoBehaviour
 
         var predictionOffset = transform.TransformDirection(deviation) * deviationAmount * leadTimePercentage;
 
-        deviatedPrediction = standardPrediction + predictionOffset;
+        if (distance.magnitude > stopDeviatingDistance)
+            deviatedPrediction = standardPrediction + predictionOffset;
+        else
+            deviatedPrediction = standardPrediction;
     }
 
     private void RotateRocket()

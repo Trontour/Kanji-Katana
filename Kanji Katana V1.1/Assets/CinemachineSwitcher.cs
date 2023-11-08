@@ -18,11 +18,13 @@ public class CinemachineSwitcher : MonoBehaviour
 
     private bool isFreelook;
     private Animator animator;
+    private Transform currentCamTransform;
 
 
 
     private void Awake()
     {
+        currentCamTransform = freelookCam.transform; 
         if (targetLockCam.Priority == 1)
         {
             isFreelook = true;
@@ -36,9 +38,10 @@ public class CinemachineSwitcher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.position = currentCamTransform.position;
         if (playerScript.checkBattleMode())
         {
-            Debug.Log("WOrks");
+            //Debug.Log("WOrks");
             switchCam();
         }
     }
@@ -46,11 +49,13 @@ public class CinemachineSwitcher : MonoBehaviour
     {
         if (isFreelook)
         {
+            currentCamTransform = targetLockCam.transform;
             animator.Play("TargetCamera");
             isFreelook = false;
         }
         else
         {
+            currentCamTransform = freelookCam.transform ;
             animator.Play("FreelookCamera");
             isFreelook = true;
         }

@@ -14,7 +14,7 @@ public class TextOrientation : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        cam = GameObject.Find("Player").transform;
+        cam = GameObject.Find("State-Driven Camera").transform;
     }
 
     // Update is called once per frame

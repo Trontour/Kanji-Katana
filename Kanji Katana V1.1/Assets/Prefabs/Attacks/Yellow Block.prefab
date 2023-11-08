@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1466471638334120183}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 4617299832628220708}
   - component: {fileID: 6369585329384233577}
   - component: {fileID: 2957047400213157810}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,6 +91,7 @@ MonoBehaviour:
   maxDistancePredict: 20
   minDistancePredict: 5
   maxTimePrediction: 0
+  stopDeviatingDistance: 15
   deviationAmount: 10
   deviationSpeed: 2
 --- !u!54 &6369585329384233577
@@ -152,7 +153,7 @@ GameObject:
   - component: {fileID: 316740117829059809}
   - component: {fileID: 3080865724849193090}
   - component: {fileID: 1463907771181150267}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +237,7 @@ GameObject:
   - component: {fileID: 4067988118633117600}
   - component: {fileID: 3053231247176703560}
   - component: {fileID: 2545862420137191277}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,7 +423,7 @@ GameObject:
   - component: {fileID: 3621356933756203801}
   - component: {fileID: 4074456015414226459}
   - component: {fileID: 5595649725288602852}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Yellow Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
