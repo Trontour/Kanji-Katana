@@ -53,6 +53,7 @@ public class HomingBlock : MonoBehaviour
             rb.velocity = transform.forward * speed;
 
             var leadTimePercentage = Mathf.InverseLerp(minDistancePredict, maxDistancePredict, Vector3.Distance(transform.position, target.transform.position));
+            
 
             PredictMovement(leadTimePercentage);
 

@@ -14,13 +14,14 @@ public class TextOrientation : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        cam = GameObject.Find("FreeLook Camera").transform;
+        cam = GameObject.Find("Player").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(cam);
+        //transform.LookAt(cam);
+        transform.rotation = Quaternion.LookRotation(transform.position - cam.position);
         transform.position = block.position;
     }
 }

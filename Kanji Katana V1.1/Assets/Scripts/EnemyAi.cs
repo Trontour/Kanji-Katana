@@ -50,7 +50,7 @@ public class EnemyAi : MonoBehaviour
     }
     private void Patroling()
     {
-        Debug.Log("attack: " + playerInAttackRange + ", sight " + playerInSightRange);
+        //Debug.Log("attack: " + playerInAttackRange + ", sight " + playerInSightRange);
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet)
