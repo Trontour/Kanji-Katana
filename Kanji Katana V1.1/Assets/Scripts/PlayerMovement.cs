@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float sprintSpeed;
 
     public float groundDrag;
+    private float velocity;
 
     [Header("Jumping")]
     public float jumpForce;
@@ -45,10 +46,14 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
-    public MovementState state;
+    private MovementState state;
 
+    [Header("Animator Controller")]
+    public bool isWalking;
+    public bool isSprinting;
     public enum MovementState
     {
+        idle,
         walking,
         sprinting,
         crouching,
@@ -121,6 +126,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
+        bool keyPressed = (horizontalInput !=0 || verticalInput !=0);
 
         //Mode - Crouching
         if (Input.GetKey(crouchKey))
@@ -133,13 +139,29 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
+            if(keyPressed)
+            {
+                isSprinting = true;
+            }
         }
 
         //Mode - Walking
         else if (grounded)
         {
-            state = MovementState.walking;
             moveSpeed = walkSpeed;
+            state = MovementState.walking;
+            if (keyPressed)
+            {
+                isWalking = true;
+                isSprinting = false;
+            }
+            else 
+            {
+                isWalking = false;
+                isSprinting = false;
+            }
+
+            
         }
 
         
@@ -149,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.air;
         }
-
+        
 
 
     }
@@ -183,7 +205,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         //limit velocity
-        if (flatVel.magnitude > moveSpeed)
+        velocity = flatVel.magnitude;
+        if (velocity > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed; //calculates what the velocity should be capped
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z); //actually applies the new limited velocity
