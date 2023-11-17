@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private float velocity;
 
     [Header("Jumping")]
+    [SerializeField] private float jumpButtonGracePeriod = 0.2f;
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
@@ -39,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform orientation;
 
+    ///[Header("Animation")]
+    
     float horizontalInput;
     float verticalInput;
 
@@ -49,8 +52,17 @@ public class PlayerMovement : MonoBehaviour
     private MovementState state;
 
     [Header("Animator Controller")]
+    private Animator animator;
     public bool isWalking;
     public bool isSprinting;
+    private bool isJumping;
+    private bool isGrounded;
+    private bool isFalling;
+    private float? lastGroundedTime;
+    private float? jumpButtonPressedTime;
+    private int isFallingHash;
+    private int isJumpingHash;
+    private int isGroundedHash;
     public enum MovementState
     {
         idle,
@@ -67,6 +79,10 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
 
         startYScale = transform.localScale.y;
+        animator = GameObject.Find("Y Bot@Idle").GetComponent<Animator>();
+        isFallingHash = Animator.StringToHash("isFalling");
+        isJumpingHash = Animator.StringToHash("isJumping");
+        isGroundedHash = Animator.StringToHash("isGrounded");
 
     }
     private void Update()
@@ -80,7 +96,12 @@ public class PlayerMovement : MonoBehaviour
 
         //handle drag
         if (grounded)
+        {
+            
             rb.drag = groundDrag;
+            lastGroundedTime = Time.time;
+        }
+            
         else
             rb.drag = 0;
     }
@@ -96,16 +117,45 @@ public class PlayerMovement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         //when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetKeyDown(jumpKey) && readyToJump && grounded)
         {
-            Debug.Log("jump");
+            jumpButtonPressedTime = Time.time;
+            animator.SetBool(isJumpingHash, true);
+            isJumping = true;
+            animator.SetBool(isGroundedHash, false);
+            isGrounded = false;
+            //Debug.Log("jump");
             readyToJump = false;
             Jump();
 
             Invoke(nameof(ResetJump), jumpCooldown);
 
         }
-
+        else if (Time.time-lastGroundedTime >= 0.05)
+        {
+            animator.SetBool(isFallingHash, true);
+            isFalling = true;
+            animator.SetBool(isJumpingHash, false);
+            isJumping = false;
+            animator.SetBool("isGrounded", false);
+            isGrounded = false;
+            //if (Time.time - jumpButtonPressedTime <= jumpButtonGracePeriod)
+            //{
+            //    animator.SetBool("isJumping", true);
+            //    isJumping = true;
+            //    jumpButtonPressedTime = null;
+            //    lastGroundedTime = null;
+            //}
+        }
+        else if(grounded && isFalling)
+        {
+            animator.SetBool("isFalling", false);
+            isFalling = false;
+            animator.SetBool("isGrounded", true);
+            isGrounded = true;
+            animator.SetBool(isJumpingHash, false);
+            isJumping = false;
+        }
         //start crouch
         if (Input.GetKeyDown(crouchKey))
         {
@@ -139,9 +189,14 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
-            if(keyPressed)
+            if(velocity >= 5 && keyPressed)
             {
                 isSprinting = true;
+            }
+            else
+            {
+                isWalking = false;
+                isSprinting = false;
             }
         }
 

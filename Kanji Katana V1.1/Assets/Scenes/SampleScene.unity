@@ -387,7 +387,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 230721616}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3939467, y: 0.4608775, z: 0.11449504, w: 0.78694904}
+  m_LocalRotation: {x: 0.3939467, y: 0.46087754, z: 0.11449504, w: 0.78694904}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -483,7 +483,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11009072, y: -9.463168e-10, z: 1.04817814e-10, w: 0.9939216}
+  m_LocalRotation: {x: 0.11009072, y: 0.0000000074052937, z: -8.202398e-10, w: 0.9939216}
   m_LocalPosition: {x: 3.7737908, y: 3.087839, z: -9.952633}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -665,7 +665,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 331751527}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
   m_Name: 
@@ -1958,6 +1958,7 @@ MonoBehaviour:
   walkSpeed: 7
   sprintSpeed: 20
   groundDrag: 5
+  jumpButtonGracePeriod: 1
   jumpForce: 24
   jumpCooldown: 0.25
   airMultiplier: 0.4
@@ -3043,10 +3044,10 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1473180225}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: c26f98172c8394041a7640db1bb93663, type: 3}
   m_Controller: {fileID: 9100000, guid: 34e69ace76e97f24d9982c9b76cec501, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 1
+  m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
