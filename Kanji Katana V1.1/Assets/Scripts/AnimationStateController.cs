@@ -10,7 +10,7 @@ public class AnimationStateController : MonoBehaviour
     private int isSprintingHash;
 
     [Header("References")]
-    [SerializeField] private PlayerMovement playerScript;
+    [SerializeField] private PlayerMovementScript playerScript;
 
     void Start()
     {

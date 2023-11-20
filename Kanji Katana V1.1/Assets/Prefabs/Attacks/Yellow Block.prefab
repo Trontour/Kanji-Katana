@@ -84,8 +84,8 @@ MonoBehaviour:
   yellowBlock: {fileID: 7436279456794668460}
   upwardsHeight: 30
   randomSpawnRange: 20
-  randomHeightMultiplierMin: 1
-  randomHeightMultiplierMax: 1
+  randomHeightMultiplierMin: 0.5
+  randomHeightMultiplierMax: 1.5
   speed: 30
   rotateSpeed: 100
   maxDistancePredict: 20
