@@ -100,7 +100,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, .2f, whatIsGround); //
+        grounded = Physics.Raycast(transform.position, Vector3.down, .3f, whatIsGround); //
         //handle drag
         if (grounded)
         {
@@ -238,24 +238,39 @@ public class PlayerMovementScript : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         Debug.Log("Slope " + OnSlope());
+
+        /*
+         REEADDD
+        Next time, I want to get rid of .addForce, and just change the rb.velocity
+        Use orientation and that new video tutorial in the playlist. Change orientation to point in the correct direction, or maybe make another empty object.
+        Disable gravity when on a slope
+         */
         if (OnSlope())
         {
-            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
-
-            if (rb.velocity.y > 0)
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            rb.useGravity = false;
+            //rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+            if(!isJumping)
+                rb.velocity = GetSlopeMoveDirection() * moveSpeed;
+            //if (rb.velocity.y > 0)
+            //    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
 
         }
 
-        else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        else if (grounded) { 
+            rb.useGravity = true; 
+            //rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            if(!isJumping)
+                rb.velocity = moveDirection.normalized * moveSpeed;
+        }
 
         else if (!grounded)
         {
+            rb.useGravity = true;
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            //rb.velocity = (moveDirection.normalized * moveSpeed * 10f * airMultiplier);
         }
 
-        rb.useGravity = !OnSlope();
+        //rb.useGravity = !OnSlope();
     }
 
     private void SpeedControl()
