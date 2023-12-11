@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerBattle : MonoBehaviour
 {
-    //[Header("References")]
+    [Header("References")]
+    [SerializeField] private GameObject enemyLocator;
+    [SerializeField] private Image target;
     //public GameObject freeLookCamera;
     //public GameObject battleCamera;
 
@@ -21,6 +24,8 @@ public class PlayerBattle : MonoBehaviour
     public void Awake()
     {
         //SwitchCameraStyle(CameraStyle.Freelook);
+        inBattleMode = false;
+        target.enabled = true;
     }
 
 
@@ -28,9 +33,46 @@ public class PlayerBattle : MonoBehaviour
     void Update()
     {
         //UpdateBattleMode();
+        if (inBattleMode)
+        {
+            trackNearestEnemy();
+        }
         
         
 
+    }
+
+    void trackNearestEnemy()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, battleRange, whatIsEnemy);
+        Collider nearestEnemy = null;
+        float minDistance = float.MaxValue;
+
+        if (hitColliders.Length > 1) {
+            foreach (var hitCollider in hitColliders)
+            {
+                float distance = Vector3.Distance(transform.position, hitCollider.transform.position);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestEnemy = hitCollider;
+                }
+            }
+        }
+        else if (hitColliders.Length == 1) {
+            nearestEnemy = hitColliders[0];
+        }
+        
+
+        if (nearestEnemy != null)
+        {
+            enemyLocator.transform.position = nearestEnemy.transform.position;
+            target.enabled = true; 
+        }
+        else
+        {
+            target.enabled = false;
+        }
     }
     public bool checkBattleMode()
     {
@@ -55,10 +97,20 @@ public class PlayerBattle : MonoBehaviour
 
         //    }
         //}
-        if (Physics.CheckSphere(transform.position, battleRange, whatIsEnemy) && Input.GetKeyDown(battleKey))
+        if (Physics.CheckSphere(transform.position, battleRange, whatIsEnemy))
         {
-            return true;
+            inBattleMode = true;
+            if (Input.GetKeyDown(battleKey))
+            {
+                return true;
+            }
+               
         }
+        else
+        {
+            inBattleMode= false;
+        }
+        
         return false;
     }
     private void OnDrawGizmosSelected()

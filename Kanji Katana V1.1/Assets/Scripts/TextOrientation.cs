@@ -7,6 +7,7 @@ public class TextOrientation : MonoBehaviour
 {
     [Header("Text")]
     public TextMeshPro text;
+    
 
     [Header("Location")]
     [SerializeField] Transform block;

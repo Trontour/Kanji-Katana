@@ -2692,6 +2692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01fe44afba74b224088fdd0a989b628b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyLocator: {fileID: 0}
   battleRange: 200
   whatIsEnemy:
     serializedVersion: 2
