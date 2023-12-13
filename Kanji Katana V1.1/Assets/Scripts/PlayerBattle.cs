@@ -7,7 +7,9 @@ public class PlayerBattle : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject enemyLocator;
+    //[SerializeField] private GameObject targetParent;
     [SerializeField] private Image target;
+    private CinemachineSwitcher camScript;
     //public GameObject freeLookCamera;
     //public GameObject battleCamera;
 
@@ -16,6 +18,7 @@ public class PlayerBattle : MonoBehaviour
     [SerializeField] private float battleRange = 50f;
     private bool inBattleRange = false;
     private bool inBattleMode = false;
+    private bool inTargetLockMode = false;
     [SerializeField] private LayerMask whatIsEnemy;
 
     [Header("Keybinds")]
@@ -25,18 +28,22 @@ public class PlayerBattle : MonoBehaviour
     {
         //SwitchCameraStyle(CameraStyle.Freelook);
         inBattleMode = false;
-        target.enabled = true;
+        target.enabled = false;
+        camScript = GameObject.Find("State-Driven Camera").GetComponent<CinemachineSwitcher>();
+
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        //checkBattleMode();
         //UpdateBattleMode();
         if (inBattleMode)
         {
             trackNearestEnemy();
         }
+        
         
         
 
@@ -48,10 +55,11 @@ public class PlayerBattle : MonoBehaviour
         Collider nearestEnemy = null;
         float minDistance = float.MaxValue;
 
+        float distance = 0;
         if (hitColliders.Length > 1) {
             foreach (var hitCollider in hitColliders)
             {
-                float distance = Vector3.Distance(transform.position, hitCollider.transform.position);
+                distance = Vector3.Distance(transform.position, hitCollider.transform.position);
                 if (distance < minDistance)
                 {
                     minDistance = distance;
@@ -61,13 +69,26 @@ public class PlayerBattle : MonoBehaviour
         }
         else if (hitColliders.Length == 1) {
             nearestEnemy = hitColliders[0];
+            distance = Vector3.Distance(transform.position, nearestEnemy.transform.position);
         }
-        
+        else
+        {
+            return;
+        }
 
-        if (nearestEnemy != null)
+        //float distance2 = Vector3.Distance(transform.position, nearestEnemy.transform.position);
+        if (nearestEnemy != null &&  distance > 40f)
         {
             enemyLocator.transform.position = nearestEnemy.transform.position;
-            target.enabled = true; 
+            if (!camScript.isFreelook)
+            {
+                //Debug.Log("HHH");
+                target.enabled = true;
+                target.transform.localScale = new Vector3(distance, distance, distance) / 40;
+                target.transform.Rotate(Vector3.forward, 25f * Time.deltaTime);
+            }
+            else
+                target.enabled = false;
         }
         else
         {
@@ -102,6 +123,7 @@ public class PlayerBattle : MonoBehaviour
             inBattleMode = true;
             if (Input.GetKeyDown(battleKey))
             {
+                //inTargetLockMode = true;
                 return true;
             }
                
@@ -110,7 +132,7 @@ public class PlayerBattle : MonoBehaviour
         {
             inBattleMode= false;
         }
-        
+        //inTargetLockMode= false;
         return false;
     }
     private void OnDrawGizmosSelected()

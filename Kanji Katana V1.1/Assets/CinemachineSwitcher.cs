@@ -16,7 +16,7 @@ public class CinemachineSwitcher : MonoBehaviour
     [SerializeField]
     private PlayerBattle playerScript;
 
-    private bool isFreelook;
+    public bool isFreelook;
     private Animator animator;
     private Transform currentCamTransform;
 
@@ -27,15 +27,16 @@ public class CinemachineSwitcher : MonoBehaviour
         currentCamTransform = freelookCam.transform; 
         if (targetLockCam.Priority == 1)
         {
-            isFreelook = true;
+            isFreelook = false;
         }
         else
         {
-            isFreelook = false;
+            isFreelook = true;
         }
         animator = GetComponent<Animator>();
     }
     // Update is called once per frame
+
     void Update()
     {
         transform.position = currentCamTransform.position;
@@ -44,6 +45,7 @@ public class CinemachineSwitcher : MonoBehaviour
             //Debug.Log("WOrks");
             switchCam();
         }
+
     }
     void switchCam()
     {

@@ -90,7 +90,7 @@ public class PlayerMovementScript : MonoBehaviour
         //ground check
         
         //Physics.Raycast()
-        Debug.Log(grounded);
+        //Debug.Log(grounded);
         MyInput();
         SpeedControl();
         StateHandler();
@@ -237,7 +237,7 @@ public class PlayerMovementScript : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        Debug.Log("Slope " + OnSlope());
+        //Debug.Log("Slope " + OnSlope());
 
         /*
          REEADDD
