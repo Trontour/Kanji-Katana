@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class PlayerBattle : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject enemyLocator;
+    [SerializeField] private Volume volume;
+
+    private bool goggleMode = false;
     //[SerializeField] private GameObject targetParent;
     [SerializeField] private Image target;
     private CinemachineSwitcher camScript;
@@ -23,6 +28,7 @@ public class PlayerBattle : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode battleKey = KeyCode.R;
+    public KeyCode goggleKey = KeyCode.T;
 
     public void Awake()
     {
@@ -30,7 +36,10 @@ public class PlayerBattle : MonoBehaviour
         inBattleMode = false;
         target.enabled = false;
         camScript = GameObject.Find("State-Driven Camera").GetComponent<CinemachineSwitcher>();
-
+        if (volume.profile.TryGet(out ColorAdjustments colorAdj))
+        {
+            colorAdj.colorFilter.value = new Color(1f, 1f, 1f, 1f);
+        }
     }
 
 
@@ -43,9 +52,14 @@ public class PlayerBattle : MonoBehaviour
         {
             trackNearestEnemy();
         }
-        
-        
-        
+        controlGoggles();
+        //if (volume.profile.TryGet(out ColorAdjustments colorAdj))
+        //{
+        //    //colorAdj.colorFilter.value = new ColorParameter(Color.white, true, false, true);
+        //    Debug.Log(colorAdj.colorFilter.value);
+        //}
+
+
 
     }
 
@@ -135,6 +149,33 @@ public class PlayerBattle : MonoBehaviour
         //inTargetLockMode= false;
         return false;
     }
+    public void controlGoggles()
+    {
+  
+        if (Input.GetKeyDown(goggleKey))
+        {
+            //inTargetLockMode = true;
+            goggleMode = !goggleMode;
+            if (goggleMode)
+            {
+                if(volume.profile.TryGet(out ColorAdjustments colorAdj))
+                {
+                    colorAdj.colorFilter.value = new Color(.783f, .211f, .211f, 1f);
+                }
+            }
+            else
+            {
+                if (volume.profile.TryGet(out ColorAdjustments colorAdj))
+                {
+                    colorAdj.colorFilter.value = new Color(1f, 1f, 1f, 1f);
+                }
+            }
+        }
+        
+
+    }
+
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
