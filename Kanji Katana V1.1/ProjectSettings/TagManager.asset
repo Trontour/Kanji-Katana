@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraCollide
   - DoNotCollide
+  - Writeable
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - whatIsGround
   - whatIsPlayer
   - whatIsEnemy
-  - 
+  - whatIsWriteable
   - 
   - 
   - 
