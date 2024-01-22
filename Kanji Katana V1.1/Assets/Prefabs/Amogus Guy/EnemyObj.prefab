@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3748052816170636089}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 15.6, z: 171.3}
   m_LocalScale: {x: 15.000001, y: 15.000001, z: 15.000001}
   m_ConstrainProportionsScale: 1
@@ -155,7 +155,7 @@ MonoBehaviour:
     m_Bits: 512
   health: 100
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 25
+  walkPointRange: 100
   timeBetweenAttacks: 5
   projectile: {fileID: 7436279456794668460, guid: af203648b9fb6f24597290a46ad6bae6,
     type: 3}
@@ -163,6 +163,7 @@ MonoBehaviour:
   attackRange: 130
   playerInSightRange: 0
   playerInAttackRange: 0
+  enemyHiraganas: []
 --- !u!1 &5401739208455710111
 GameObject:
   m_ObjectHideFlags: 0

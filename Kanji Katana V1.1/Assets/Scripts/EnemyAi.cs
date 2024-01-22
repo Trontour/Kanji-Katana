@@ -8,6 +8,8 @@ using static UnityEngine.UI.Image;
 
 public class EnemyAi : MonoBehaviour
 {
+
+    [Header("References")]
     public NavMeshAgent agent;
 
     public Transform player;
@@ -15,20 +17,29 @@ public class EnemyAi : MonoBehaviour
     public LayerMask whatIsGround, whatIsPlayer;
 
     public float health;
+    
 
     //patroling
+    [Header("PATROLLING")]
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange = 50;
 
     //Attacking
+    [Header("ATTACKING")]
     public float timeBetweenAttacks;
     bool alreadyAttacked;
     public GameObject projectile;
 
     //States
+    [Header("STATES")]
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
+
+    [Header("JAPANESE")]
+    public List<HiraganaObject> enemyHiraganas;
+    private HiraganaObject currentHiragana;
+
 
     private void Awake()
     {
@@ -122,13 +133,57 @@ public class EnemyAi : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.Euler(0,-90,0)).GetComponent<Rigidbody>();
+            chooseCurrentHiragana();
+            GameObject spell = Instantiate(projectile, transform.position, Quaternion.Euler(0, -90, 0));
+
+            Transform characterTransform = spell.transform.Find("Character");
+
+            if (characterTransform != null)
+            {
+                // Get the TextOrientation script component from the child
+                TextOrientation textOrientation = characterTransform.GetComponent<TextOrientation>();
+
+                if (textOrientation != null)
+                {
+                    //if(playerBattle.goggleMode)
+                    textOrientation.currentHiragana = currentHiragana;
+                    //else
+                    //    textOrientation.currentText = currentHiragana.romaji;
+                }
+                else
+                {
+                    Debug.LogError("TextOrientation script not found on the Character object.");
+                }
+            }
+            else
+            {
+                Debug.LogError("Character child object not found in the spell GameObject.");
+            }
+            //spell.TextOri
+
+            //Rigidbody rb = spell.GetComponent<Rigidbody>();
+            //spell
 
             //rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
             //rb.AddForce(transform.up * 8f, ForceMode.Impulse);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
+        }
+    }
+    private void chooseCurrentHiragana()
+    {
+        if (enemyHiraganas.Count > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, enemyHiraganas.Count); // Generates a random index
+            currentHiragana = enemyHiraganas[randomIndex]; // Retrieves the element at the random index
+
+            // Now you can use 'randomHiragana' as needed
+            Debug.Log($"Random Hiragana: {currentHiragana.hiragana}, Romaji: {currentHiragana.romaji}");
+        }
+        else
+        {
+            Debug.Log("The list is empty.");
         }
     }
     private void ResetAttack()

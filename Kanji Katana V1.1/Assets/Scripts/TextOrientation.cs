@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class TextOrientation : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private PlayerBattle playerBattle;
+
     [Header("Text")]
+    public HiraganaObject currentHiragana;
     public TextMeshPro text;
     
 
@@ -16,6 +20,7 @@ public class TextOrientation : MonoBehaviour
     void Awake()
     {
         cam = GameObject.Find("State-Driven Camera").transform;
+        playerBattle = GameObject.Find("Player").GetComponent<PlayerBattle>();
     }
 
     // Update is called once per frame
@@ -24,5 +29,12 @@ public class TextOrientation : MonoBehaviour
         //transform.LookAt(cam);
         transform.rotation = Quaternion.LookRotation(transform.position - cam.position);
         transform.position = block.position;
+        if(playerBattle.goggleMode)
+            text.text = currentHiragana.hiragana;
+        else
+            text.text = currentHiragana.romaji;
+        //Debug.Log(currentText);
+
+
     }
 }

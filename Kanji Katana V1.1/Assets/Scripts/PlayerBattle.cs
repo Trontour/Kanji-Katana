@@ -11,7 +11,7 @@ public class PlayerBattle : MonoBehaviour
     [SerializeField] private GameObject enemyLocator;
     [SerializeField] private Volume volume;
 
-    private bool goggleMode = false;
+    public bool goggleMode = false;
     //[SerializeField] private GameObject targetParent;
     [SerializeField] private Image target;
     private CinemachineSwitcher camScript;
@@ -160,7 +160,8 @@ public class PlayerBattle : MonoBehaviour
             {
                 if(volume.profile.TryGet(out ColorAdjustments colorAdj))
                 {
-                    colorAdj.colorFilter.value = new Color(.783f, .211f, .211f, 1f);
+                    colorAdj.colorFilter.value = new Color(1f, .506f, .506f, 1f);
+                    
                 }
             }
             else

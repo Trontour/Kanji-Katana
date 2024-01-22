@@ -6,16 +6,18 @@ using System.Linq;
 using UnityEngine;
 
 
+
 [Serializable]
 public class PlayerData : MonoBehaviour
 {
+    
     private void Start()
     {
         //Save();
         //Load();
-        saveNewHiragana("が", "ga");
-        saveNewHiragana("ら", "ra");
-        saveNewHiragana("ぽ", "po");
+        //saveNewHiragana("が", "ga");
+        //saveNewHiragana("ら", "ra");
+        //saveNewHiragana("ぽ", "po");
     }
     private void Update()
     {
@@ -25,7 +27,7 @@ public class PlayerData : MonoBehaviour
     {
 
         List<HiraganaObject> hiraganas = new List<HiraganaObject>();
-        hiraganas.Add(new HiraganaObject("か", "ka"));
+        //hiraganas.Add(new HiraganaObject("か", "ka"));
         string json = JsonHelper.ToJson<HiraganaObject>(hiraganas.ToArray());
         //Debug.Log(json);
 
@@ -33,7 +35,25 @@ public class PlayerData : MonoBehaviour
         //Debug.Log("Data Path: " + Application.dataPath);
 
     }
-    private void saveNewHiragana(string hiragana, string romaji)//Appends a new hiragana to the player data on hiraganas
+    public void clearAllHiragana()
+    {
+
+        string path = Application.dataPath + "/hiragana.txt";
+
+        // Check if file exists to avoid exceptions
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            Debug.Log("File deleted successfully.");
+        }
+        else
+        {
+            Debug.Log("File not found.");
+        }
+        Save();
+
+    }
+    public void saveNewHiragana(string hiragana, string romaji, float daysTillDue)//Appends a new hiragana to the player data on hiraganas
     {
 
         //READS EXISTING HIRAGANA LIST
@@ -42,7 +62,7 @@ public class PlayerData : MonoBehaviour
 
 
         //CREATES NEW HIRA
-        HiraganaObject newHira = new HiraganaObject(hiragana, romaji);
+        HiraganaObject newHira = new HiraganaObject(hiragana, romaji, daysTillDue);
         if (!hiraganas.Contains(newHira)) //ONLY ADDS IF DOES NOT YET EXIST
             hiraganas.Add(newHira);
         string json = JsonHelper.ToJson<HiraganaObject>(hiraganas.ToArray());
@@ -53,11 +73,12 @@ public class PlayerData : MonoBehaviour
         //Debug.Log("Data Path: " + Application.dataPath);
 
     }
-    private void Load()
+    public List<HiraganaObject> getHiraganas()
     {
         string content = File.ReadAllText(Application.dataPath + "/hiragana.txt");
         List<HiraganaObject> hiraganas = JsonHelper.FromJson<HiraganaObject>(content).ToList<HiraganaObject>();
-        Debug.Log("TEST: "+hiraganas[0].romaji);
+        //Debug.Log("TEST: "+hiraganas[0].romaji);
+        return hiraganas;
     }
 
     
@@ -120,17 +141,26 @@ public class HiraganaObject
 {
     public string hiragana;
     public string romaji;
+    public float daysTillDue;
     
 
     public HiraganaObject()
     {
         romaji = "";
         hiragana = "";
+        daysTillDue = -1;
     }
     public HiraganaObject(string hir, string rom)
     {
         romaji = rom;
         hiragana = hir;
+        daysTillDue = 1f;
+    }
+    public HiraganaObject(string hir, string rom, float daysDue)
+    {
+        romaji = rom;
+        hiragana = hir;
+        daysTillDue = daysDue;
     }
     public bool Equals(HiraganaObject other)
     {
