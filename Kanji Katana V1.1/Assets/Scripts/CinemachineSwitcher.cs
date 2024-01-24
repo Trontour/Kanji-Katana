@@ -45,6 +45,10 @@ public class CinemachineSwitcher : MonoBehaviour
             //Debug.Log("WOrks");
             switchCam();
         }
+        else if (!isFreelook && playerScript.inBattleMode == false)
+        {
+            switchCam();
+        }
 
     }
     void switchCam()

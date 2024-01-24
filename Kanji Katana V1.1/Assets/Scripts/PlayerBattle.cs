@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class PlayerBattle : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject enemyLocator;
     [SerializeField] private Volume volume;
+    //[SerializeField] private RigBuilder rigBuilder;
+    [SerializeField] private Rig targetTracking;
 
     public bool goggleMode = false;
     //[SerializeField] private GameObject targetParent;
@@ -22,7 +25,7 @@ public class PlayerBattle : MonoBehaviour
     [Header("Battle")]
     [SerializeField] private float battleRange = 50f;
     private bool inBattleRange = false;
-    private bool inBattleMode = false;
+    public bool inBattleMode = false;
     private bool inTargetLockMode = false;
     [SerializeField] private LayerMask whatIsEnemy;
 
@@ -32,6 +35,8 @@ public class PlayerBattle : MonoBehaviour
 
     public void Awake()
     {
+        //targetTracking = rigBuilder.GetComponentInChildren<Rig>();
+        targetTracking.weight = 0;
         //SwitchCameraStyle(CameraStyle.Freelook);
         inBattleMode = false;
         target.enabled = false;
@@ -87,51 +92,48 @@ public class PlayerBattle : MonoBehaviour
         }
         else
         {
+            if (target.enabled == true)
+                targetTracking.weight = 0.0f;
+                target.enabled = false;
             return;
         }
 
         //float distance2 = Vector3.Distance(transform.position, nearestEnemy.transform.position);
-        if (nearestEnemy != null &&  distance > 40f)
+        if (nearestEnemy != null)
         {
             enemyLocator.transform.position = nearestEnemy.transform.position;
             if (!camScript.isFreelook)
             {
                 //Debug.Log("HHH");
-                target.enabled = true;
+                if (distance > 40f)
+                {
+                    target.enabled = true;
+                    targetTracking.weight = 0.8f;
+                }
+                else
+                {
+                    target.enabled = false;
+                    targetTracking.weight = 0.0f;
+                }
                 target.transform.localScale = new Vector3(distance, distance, distance) / 40;
                 target.transform.Rotate(Vector3.forward, 25f * Time.deltaTime);
             }
             else
+            {
                 target.enabled = false;
+                targetTracking.weight = 0.0f;
+            }
         }
         else
         {
             target.enabled = false;
+            targetTracking.weight = 0.0f;
         }
     }
     public bool checkBattleMode()
     {
         //Debug.Log(transform.position);
-        //if (!inBattleMode)
-        //{
-        //    if (Physics.CheckSphere(transform.position, battleRange, whatIsEnemy))
-        //    {
-        //        inBattleRange = true;
-        //        inBattleMode = true;
-        //        //SwitchCameraStyle(CameraStyle.Battle);
-
-        //    }
-        //}
-        //else
-        //{
-        //    if (!Physics.CheckSphere(transform.position, battleRange, whatIsEnemy))
-        //    {
-        //        inBattleRange = false;
-        //        inBattleMode = false;
-        //        //SwitchCameraStyle(CameraStyle.Freelook);
-
-        //    }
-        //}
+      
         if (Physics.CheckSphere(transform.position, battleRange, whatIsEnemy))
         {
             inBattleMode = true;

@@ -13,8 +13,11 @@ namespace Shady
         private List<Vector3> points = new List<Vector3>();
         private LayerMask writeableLayerMask;
 
+        private Transform spellLocator;
+
         void Start()
         {
+            spellLocator = GameObject.Find("SpellLocator").transform;
             writeableLayerMask = LayerMask.GetMask("whatIsWriteable");
             if (!Cam)
             {
@@ -25,6 +28,17 @@ namespace Shady
         // Update is called once per frame
         void Update()
         {
+            var Ray = Cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(Ray, out hit, Mathf.Infinity, writeableLayerMask))
+            {
+                if (hit.collider.CompareTag("Writeable"))
+                {
+                    spellLocator.transform.position = hit.transform.position;
+                    // points.Add(new Vector3(hit.point.x, 0f, hit.point.z));
+                    
+                }//if end
+            }//if end
             if (Input.GetMouseButtonDown(0))
             {
                 CreateNewLine();
@@ -72,6 +86,7 @@ namespace Shady
             {
                 if (hit.collider.CompareTag("Writeable"))
                 {
+                    spellLocator.transform.position = hit.transform.position;
                     // points.Add(new Vector3(hit.point.x, 0f, hit.point.z));
                     points.Add(hit.point);
                     UpdateLinePoints();
