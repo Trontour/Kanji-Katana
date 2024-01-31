@@ -34,7 +34,7 @@ namespace Shady
             {
                 if (hit.collider.CompareTag("Writeable"))
                 {
-                    spellLocator.transform.position = hit.transform.position;
+                    spellLocator.transform.position = hit.point;
                     // points.Add(new Vector3(hit.point.x, 0f, hit.point.z));
                     
                 }//if end
@@ -86,7 +86,7 @@ namespace Shady
             {
                 if (hit.collider.CompareTag("Writeable"))
                 {
-                    spellLocator.transform.position = hit.transform.position;
+                    //spellLocator.transform.position = hit.transform.position;
                     // points.Add(new Vector3(hit.point.x, 0f, hit.point.z));
                     points.Add(hit.point);
                     UpdateLinePoints();
