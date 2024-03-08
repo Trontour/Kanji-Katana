@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
@@ -15,12 +15,19 @@ public class TextureDrawer : MonoBehaviour
     public Renderer rend;
     public KeyCode saveKey = KeyCode.N;
     public LayerMask ignoreLayers;
+    public MangaOcrRun OCRSCript;
 
     [Header("BRUSH SETTINGS")]
     public Color brushColor = Color.black; // Default brush color
     public int brushSize = 1; // Default brush size
 
     private Vector2? lastPixelUV = null;
+    private string currentImgPath;
+    private string currentJapaneseChar;
+    private bool isRequesting = false;
+    private bool isRequestingTexture = false;
+    private bool resultReady = false;
+    private bool textureReady = false;
 
     void Start()
     {
@@ -52,14 +59,33 @@ public class TextureDrawer : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(saveKey))
+
+        if (Input.GetKeyDown(saveKey) && !isRequesting && !isRequestingTexture)
         {
+            // Assuming SaveTexture now correctly manages isRequestingTexture flag
             SaveTexture(drawingTexture);
-            Debug.Log("Saved Texture");
+            isRequestingTexture = true; // This should be the only place you set it true
+        }
+
+        if (textureReady && !isRequesting)
+        {
+            Debug.Log("Starting OCR request...");
+            StartOcrRequest(currentImgPath); // Ensure this uses the current image path
+            //StartOcrRequest("C:/Github/Python/maga.jpg");
+            textureReady = false; // Reset textureReady after starting OCR request
+            isRequestingTexture = false;
+            isRequesting = true;  // Indicate OCR request is in progress
             FillTexture(Color.white);
         }
 
-        if (!Input.GetMouseButton(0))
+        if (resultReady)
+        {
+            Debug.Log($"OCR Result: {currentJapaneseChar}");
+            resultReady = false; // Reset resultReady after handling the result
+            isRequesting = false; // Reset isRequesting to allow new operations
+        }
+
+        if (!Input.GetMouseButton(0)) 
         {
             lastPixelUV = null;
             return;
@@ -93,6 +119,8 @@ public class TextureDrawer : MonoBehaviour
         }
 
         lastPixelUV = pixelUV;
+
+
     }
 
     void LateUpdate()
@@ -100,7 +128,11 @@ public class TextureDrawer : MonoBehaviour
         // Apply the texture changes at the end of the frame to batch drawing updates.
         drawingTexture.Apply();
     }
-
+    async void StartOcrRequest(string imagePath)
+    {
+        currentJapaneseChar = await OCRSCript.RequestOcrResultAsync(imagePath);
+        resultReady = true;
+    }
     void FillTexture(Color color)
     {
         Color[] clearColors = new Color[drawingTexture.width * drawingTexture.height];
@@ -193,11 +225,15 @@ public class TextureDrawer : MonoBehaviour
         {
             System.IO.Directory.CreateDirectory(dirPath);
         }
-        await Task.Run(() => System.IO.File.WriteAllBytes(dirPath + "/R_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".png", bytes));
+        string finalPath = dirPath + "/R_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".png";
+        await Task.Run(() => System.IO.File.WriteAllBytes(finalPath, bytes));
+        textureReady = true;
         Debug.Log(bytes.Length / 1024 + "Kb was saved as: " + dirPath);
+        currentImgPath = finalPath;
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
 #endif
+
     }
 
     private void DeleteAllPngFiles()
@@ -250,174 +286,3 @@ public class TextureDrawer : MonoBehaviour
 }
 
 
-
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using System.Threading.Tasks;
-
-//public class TextureDrawer : MonoBehaviour
-
-//{
-//    [Header("REFERENCES")]
-//    public Camera cam;
-//    public Texture2D drawingTexture; // Public variable to assign your texture
-//    public Renderer rend;
-//    public KeyCode saveKey = KeyCode.N;
-
-//    private Vector2? lastPixelUV = null; // Nullable vector to store the last position
-//    //public Material myMaterial;
-//    // Start is called before the first frame update
-//    void Start()
-//    {
-
-//        rend = GameObject.Find("SpellCanvas").GetComponent<Renderer>();
-
-
-//        if (!cam)
-//        {
-//            cam = Camera.main;
-//        }//if end
-
-//        // Optional: Create and assign the texture programmatically if not assigned
-//        if (drawingTexture == null)
-//        {
-//            int width = 128; // Example width
-//            int height = 128; // Example height
-//            drawingTexture = new Texture2D(width, height);
-//            // Initialize texture with a blank color (e.g., white)
-//            for (int y = 0; y < drawingTexture.height; y++)
-//            {
-//                for (int x = 0; x < drawingTexture.width; x++)
-//                {
-//                    drawingTexture.SetPixel(x, y, Color.white);
-//                }
-//            }
-//            drawingTexture.Apply();
-//        }
-//        rend.material.mainTexture = drawingTexture;
-//    }
-
-//    void Update()
-//    {
-
-//        if (Input.GetKeyDown(saveKey))
-//        {
-//            SaveTexture(drawingTexture);
-//            Debug.Log("Saved Texture");
-//            Color[] clearColors = new Color[drawingTexture.width * drawingTexture.height];
-//            for (int i = 0; i < clearColors.Length; i++)
-//            {
-//                clearColors[i] = Color.white;
-//            }
-//            drawingTexture.SetPixels(clearColors);
-//            drawingTexture.Apply();
-
-//        }
-//        if (!Input.GetMouseButton(0))
-//        {
-//            lastPixelUV = null;
-//            return;
-//        }
-
-//        RaycastHit hit;
-//        if (!Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
-//        {
-//            lastPixelUV = null;
-//            return;
-//        }
-
-
-//        MeshCollider meshCollider = hit.collider as MeshCollider;
-//        //sssrend.material = myMaterial;
-//        if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
-//        {
-//            //if (rend == null)
-//            //    Debug.Log("1");
-//            //if (rend.sharedMaterial == null)
-//            //    Debug.Log("2");
-//            //if (rend.sharedMaterial.mainTexture == null)
-//            //    Debug.Log("3");
-//            //if (meshCollider == null)
-//            //    Debug.Log("4");
-//            //Debug.Log("Condition Failed");
-//            lastPixelUV = null;
-//            return;
-
-
-
-//        }
-
-//        Vector2 pixelUV = hit.textureCoord;
-//        pixelUV.x *= drawingTexture.width;
-//        pixelUV.y *= drawingTexture.height;
-
-//        if (lastPixelUV.HasValue)
-//        {
-//            // Draw line from lastPixelUV.Value to pixelUV
-//            DrawLine(lastPixelUV.Value, pixelUV, Color.black);
-//        }
-//        else
-//        {
-//            // If there's no last position, simply mark the current position
-//            drawingTexture.SetPixel((int)pixelUV.x, (int)pixelUV.y, Color.black);
-//            drawingTexture.Apply();
-//        }
-
-//        lastPixelUV = pixelUV; // Update the last position for the next frame
-//        //Debug.Log((int)pixelUV.x + " " + (int)pixelUV.y);
-//        //drawingTexture.Apply();
-
-
-
-//    }
-
-//    void DrawLine(Vector2 from, Vector2 to, Color color)
-//    {
-//        int x0 = (int)from.x;
-//        int y0 = (int)from.y;
-//        int x1 = (int)to.x;
-//        int y1 = (int)to.y;
-
-//        int dx = Mathf.Abs(x1 - x0);
-//        int dy = Mathf.Abs(y1 - y0);
-//        int sx = x0 < x1 ? 1 : -1;
-//        int sy = y0 < y1 ? 1 : -1;
-//        int err = dx - dy;
-
-//        while (true)
-//        {
-//            drawingTexture.SetPixel(x0, y0, color);
-
-//            if (x0 == x1 && y0 == y1) break;
-
-//            int e2 = 2 * err;
-//            if (e2 > -dy)
-//            {
-//                err -= dy;
-//                x0 += sx;
-//            }
-//            if (e2 < dx)
-//            {
-//                err += dx;
-//                y0 += sy;
-//            }
-//        }
-//        drawingTexture.Apply();
-//    }
-//    private async void SaveTexture(Texture2D texture)
-//    {
-//        byte[] bytes = texture.EncodeToPNG();
-//        var dirPath = Application.dataPath + "/RenderOutput";
-//        if (!System.IO.Directory.Exists(dirPath))
-//        {
-//            System.IO.Directory.CreateDirectory(dirPath);
-//        }
-//        await Task.Run(() => System.IO.File.WriteAllBytes(dirPath + "/R_" + System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".png", bytes));
-//        Debug.Log(bytes.Length / 1024 + "Kb was saved as: " + dirPath);
-//#if UNITY_EDITOR
-//        UnityEditor.AssetDatabase.Refresh();
-//#endif
-//    }
-
-//}

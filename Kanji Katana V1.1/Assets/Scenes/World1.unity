@@ -327,37 +327,37 @@ PrefabInstance:
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.092425
+      value: -3.4449944
       objectReference: {fileID: 0}
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.95901
+      value: -11.971332
       objectReference: {fileID: 0}
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -175.31024
+      value: -173.71146
       objectReference: {fileID: 0}
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.15712257
+      value: -0.7989552
       objectReference: {fileID: 0}
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.11052047
+      value: -0.57046556
       objectReference: {fileID: 0}
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.80268884
+      value: -0.15492792
       objectReference: {fileID: 0}
     - target: {fileID: 7322062168671436476, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.5646136
+      value: 0.11062079
       objectReference: {fileID: 0}
     - target: {fileID: 8845329727176142243, guid: e9c525160263c3e449949fd13ddd4b4f,
         type: 3}
@@ -536,6 +536,7 @@ GameObject:
   m_Component:
   - component: {fileID: 989392108}
   - component: {fileID: 989392109}
+  - component: {fileID: 989392110}
   m_Layer: 0
   m_Name: SpellHandler
   m_TagString: Untagged
@@ -579,8 +580,21 @@ MonoBehaviour:
   ignoreLayers:
     serializedVersion: 2
     m_Bits: 0
+  OCRSCript: {fileID: 989392110}
   brushColor: {r: 0, g: 0, b: 0, a: 1}
   brushSize: 3
+--- !u!114 &989392110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989392107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0080e0219de34bd418b6ba01085da2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1225111306
 GameObject:
   m_ObjectHideFlags: 0
