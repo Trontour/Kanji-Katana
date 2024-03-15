@@ -21,14 +21,20 @@ public class TextureDrawer : MonoBehaviour
     public Color brushColor = Color.black; // Default brush color
     public int brushSize = 1; // Default brush size
 
+    [Header("JAPANESE HANDLING")]
     private Vector2? lastPixelUV = null;
     private string currentImgPath;
-    private string currentJapaneseChar;
+    public string currentJapaneseOutput;
     private bool isRequesting = false;
     private bool isRequestingTexture = false;
     private bool resultReady = false;
     private bool textureReady = false;
+    private int numStrokes = 0;
 
+    private void Awake()
+    {
+        currentJapaneseOutput = string.Empty; 
+    }
     void Start()
     {
 
@@ -80,7 +86,7 @@ public class TextureDrawer : MonoBehaviour
 
         if (resultReady)
         {
-            Debug.Log($"OCR Result: {currentJapaneseChar}");
+            Debug.Log($"OCR Result: {currentJapaneseOutput}");
             resultReady = false; // Reset resultReady after handling the result
             isRequesting = false; // Reset isRequesting to allow new operations
         }
@@ -130,7 +136,7 @@ public class TextureDrawer : MonoBehaviour
     }
     async void StartOcrRequest(string imagePath)
     {
-        currentJapaneseChar = await OCRSCript.RequestOcrResultAsync(imagePath);
+        currentJapaneseOutput = await OCRSCript.RequestOcrResultAsync(imagePath);
         resultReady = true;
     }
     void FillTexture(Color color)

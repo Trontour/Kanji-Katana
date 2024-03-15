@@ -17,6 +17,8 @@ public class EnemyAi : MonoBehaviour
     public LayerMask whatIsGround, whatIsPlayer;
 
     public float health;
+
+    
     
 
     //patroling
@@ -43,6 +45,7 @@ public class EnemyAi : MonoBehaviour
 
     private void Awake()
     {
+        
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         walkPointSet = false;
@@ -51,6 +54,9 @@ public class EnemyAi : MonoBehaviour
 
     private void Update()
     {
+        
+
+
         //Check for sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -137,11 +143,13 @@ public class EnemyAi : MonoBehaviour
             GameObject spell = Instantiate(projectile, transform.position, Quaternion.Euler(0, -90, 0));
 
             Transform characterTransform = spell.transform.Find("Character");
+            
 
             if (characterTransform != null)
             {
                 // Get the TextOrientation script component from the child
                 TextOrientation textOrientation = characterTransform.GetComponent<TextOrientation>();
+                textOrientation.parentBlock = spell;
 
                 if (textOrientation != null)
                 {

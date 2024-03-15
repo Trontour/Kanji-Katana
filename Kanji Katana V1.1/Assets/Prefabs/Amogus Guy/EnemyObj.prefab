@@ -159,8 +159,8 @@ MonoBehaviour:
   timeBetweenAttacks: 5
   projectile: {fileID: 7436279456794668460, guid: af203648b9fb6f24597290a46ad6bae6,
     type: 3}
-  sightRange: 150
-  attackRange: 130
+  sightRange: 300
+  attackRange: 220
   playerInSightRange: 0
   playerInAttackRange: 0
   enemyHiraganas: []

@@ -14,14 +14,15 @@ public class EnemyGenerator : MonoBehaviour
     
 
     private List<HiraganaObject> hiraganas;
+    private List<GameObject> enemies;
     // Start is called before the first frame update
     void Start()
     {
         dataController.clearAllHiragana();
         dataController.saveNewHiragana("が", "ga", 1f);
         dataController.saveNewHiragana("か", "ka", 1f);
-        dataController.saveNewHiragana("ろ", "ro", 0f);
-        dataController.saveNewHiragana("ぽ", "po", 0f);
+        dataController.saveNewHiragana("え", "e", 0f);
+        dataController.saveNewHiragana("く", "ku", 0f);
         dataController.saveNewHiragana("へ", "he", 0f);
         dataController.saveNewHiragana("い", "i", 2f);
         //dataController.saveNewHiragana("ら", "ra");
