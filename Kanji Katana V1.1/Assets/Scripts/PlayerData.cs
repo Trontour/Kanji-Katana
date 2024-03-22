@@ -53,7 +53,7 @@ public class PlayerData : MonoBehaviour
         Save();
 
     }
-    public void saveNewHiragana(string hiragana, string romaji, float daysTillDue)//Appends a new hiragana to the player data on hiraganas
+    public void saveNewHiragana(string hiragana, string romaji, int daysTillDue)//Appends a new hiragana to the player data on hiraganas
     {
 
         //READS EXISTING HIRAGANA LIST
@@ -141,7 +141,10 @@ public class HiraganaObject
 {
     public string hiragana;
     public string romaji;
-    public float daysTillDue;
+    public int daysTillDue;
+    private int previousDaysTillDue;
+    public float easyInterval;
+    public float hardInterval;
     
 
     public HiraganaObject()
@@ -154,13 +157,40 @@ public class HiraganaObject
     {
         romaji = rom;
         hiragana = hir;
-        daysTillDue = 1f;
+        daysTillDue = 1;
+        easyInterval = 2;
+        hardInterval = 0.5f;
+        previousDaysTillDue = 1;
     }
-    public HiraganaObject(string hir, string rom, float daysDue)
+    public HiraganaObject(string hir, string rom, int daysDue)
     {
         romaji = rom;
         hiragana = hir;
         daysTillDue = daysDue;
+        previousDaysTillDue = daysDue;
+        easyInterval = 2;
+        hardInterval = 0.5f;
+
+    }
+    public void setEasyInterval(float _easyInterval)
+    {
+        easyInterval = _easyInterval;
+    }
+    public void setHardInterval(float _hardInterval)
+    {
+        hardInterval = _hardInterval;
+    }
+    public void applyEasyInterval()
+    {
+        float temp = previousDaysTillDue * easyInterval;
+        daysTillDue = (int)temp;
+        previousDaysTillDue = daysTillDue;
+    }
+    public void applyHardInterval()
+    {
+        float temp = previousDaysTillDue * hardInterval;
+        daysTillDue = (int)temp;
+        previousDaysTillDue = daysTillDue;
     }
     public bool Equals(HiraganaObject other)
     {

@@ -66,7 +66,7 @@ public class TextureDrawer : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(saveKey) && !isRequesting && !isRequestingTexture)
+        if ((Input.GetKeyDown(saveKey) || Input.GetMouseButton(1) )&& !isRequesting && !isRequestingTexture)
         {
             // Assuming SaveTexture now correctly manages isRequestingTexture flag
             SaveTexture(drawingTexture);

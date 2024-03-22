@@ -19,12 +19,12 @@ public class EnemyGenerator : MonoBehaviour
     void Start()
     {
         dataController.clearAllHiragana();
-        dataController.saveNewHiragana("が", "ga", 1f);
-        dataController.saveNewHiragana("か", "ka", 1f);
-        dataController.saveNewHiragana("え", "e", 0f);
-        dataController.saveNewHiragana("く", "ku", 0f);
-        dataController.saveNewHiragana("へ", "he", 0f);
-        dataController.saveNewHiragana("い", "i", 2f);
+        dataController.saveNewHiragana("が", "ga", 1);
+        dataController.saveNewHiragana("か", "ka", 1);
+        dataController.saveNewHiragana("え", "e", 0);
+        dataController.saveNewHiragana("く", "ku", 0);
+        dataController.saveNewHiragana("へ", "he", 0);
+        dataController.saveNewHiragana("い", "i", 2);
         //dataController.saveNewHiragana("ら", "ra");
         //dataController.saveNewHiragana("ぽ", "po");
         //dataController.clearAllHiragana();
